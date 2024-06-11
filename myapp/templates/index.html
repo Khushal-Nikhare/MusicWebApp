@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function fetchTrendingSongs() {
+            $.ajax({
+                url: "{% url 'get_song' %}",
+                method: "GET",
+                success: function (data) {
+                    console.log(data)
+                    var songsList = $("#songs-list");
+                    songsList.empty();
+                    if (data.trending_songs) {
+                        data.trending_songs.forEach(function (song) {
+                            if (song.videoId != null) {
+                                songsList.append(
+                                    "<div id='" + song.videoId + "' class='playable'>" +
+                                    "<li>" +
+                                    "<img src='" + song.thumbnail + "' alt='Thumbnail' style='width: 100px; height: auto;'><br>" +
+                                    "<strong>" + song.title + "</strong> by " + song.artists.map(artist => artist.name).join(', ') + "<br>" +
+                                    "</li><hr>" +
+                                    "</div>" + "<div class='playable'>click</div>"
+                                );
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.error("Error fetching trending songs:", error);
+                }
+            });
+        }
+        function searchSong() {
+            var query = $("#search-input").val();
+            if (query) {
+                $.ajax({
+                    url: "{% url 'get_song' %}",
+                    method: "GET",
+                    data: { query: query },
+                    success: function (data) {
+                        var songsList = $("#songs-list");
+                        songsList.empty();
+                        if (data.search_results) {
+                            data.search_results.forEach(function (song) {
+                                songsList.append(
+                                    "<div id='" + song.videoId + "'>" +
+                                    "<li>" +
+                                    "<img src='" + song.thumbnail + "' alt='Thumbnail' style='width: 100px; height: auto;'><br>" +
+                                    "<strong>" + song.title + "</strong> by " + song.artists.map(artist => artist.name).join(', ') + "<br>" +
+                                    "<a href='https://www.youtube.com/watch?v=" + song.videoId + "' target='_blank'>Watch on YouTube</a>" +
+                                    "</li><hr>" +
+                                    "</div>"
+                                );
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error searching songs:", error);
+                    }
+                });
+            }
+        }
+
+        // function playSongs(videoId) {
+        //     $.ajax({
+        //         url: "{% url 'get_song' %}",
+        //         method: "GET",
+        //         data: { videoId: videoId },
+        //         success: function (data) {
+        //             if (data.paths) {
+        //                 var audioPlayer = $("#audio-player");
+        //                 if (audioPlayer.length === 0) {
+        //                     audioPlayer = $("<audio>", {
+        //                         id: "audio-player",
+        //                         controls: true,
+        //                         autoplay: true
+        //                     }).appendTo("body");
+        //                 }
+        //                 audioPlayer.attr("src", data.paths);
+        //                 audioPlayer[0].play();
+        //             }
+        //         },
+        //         error: function (error) {
+        //             console.error("Error fetching song URL:", error);
+        //         }
+        //     });
+        // }
+    </script> 
+    <script>
+        function validateForm() {
+            var artistName = document.getElementById("name").value.trim();
+            if (artistName === "") {
+                alert("Please enter an artist name.");
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #113727, #1dd1a1);
+        } */
+
+        .player {
+            width: 300px;
+            background: #fff;
+            /*   margin: 100px; */
+            padding: 20px 14px 8px 14px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 10px 2px 90px -11px rgba(13, 100, 76, 0.75);
+            -webkit-box-shadow: 10px 2px 90px -11px rgba(13, 100, 76, 0.75);
+            -moz-box-shadow: 10px 2px 90px -11px rgba(13, 100, 76, 0.75);
+        }
+
+        .trigger-div img {
+            width: 100%;
+            height: auto;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .player audio {
+            width: 100%;
+            border-radius: 6px;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        #audio-player {
+            
+            margin: 20px;
+        }
+
+        .playable {
+            margin: 20px;
+            padding: 5px;
+            border: 2px solid black;
+            width: max-content;
+        }
+
+        .trigger-div {
+            width: 200px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        #audio-container {
+            margin: 20px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".playsong").on("click", function () {
+                var songId = $(this).attr("id"); // Get the ID of the clicked song
+
+                console.log("it is called");
+
+                // Send an AJAX request to the backend to get the song URL
+                $.ajax({
+                    url: "{% url 'get_song' %}", // Backend URL to get the song URL
+                    type: "GET",
+                    data: {
+                        "song_id": songId
+                    },
+                    success: function (response) {
+                        var songUrl = response.paths; // The song URL returned from the backend
+                        
+                        // Remove any existing audio player
+                        $("#audio-container").empty();
+
+                        // Create a new audio element
+                        var audioPlayer = $("<audio></audio>").attr({
+                            "id": "audio-player",
+                            "controls": "controls",
+                            "autoplay": "autoplay",
+                            "src": "/static/"+songId+".mp3"
+                        });
+
+                        // Append the audio player to the audio container
+                        $("#audio-container").append(audioPlayer);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error fetching song URL:", error);
+                    }
+                });
+            });
+        });
+    </script>
+    <title>Document</title>
+
+    
+</head>
+
+<body>
+
+
+
+    <!-- <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const triggerDivs = document.querySelectorAll('.trigger-div');
+            const audioContainer = document.getElementById('audio-container');
+
+            triggerDivs.forEach(div => {
+                div.addEventListener('click', function () {
+                    // Clear any existing audio player
+                    audioContainer.innerHTML = '';
+
+                    // Create a new audio player
+                    const audioPlayer = document.createElement('audio');
+                    audioPlayer.id = `audio-player-${div.id}`;
+                    audioPlayer.controls = true;
+
+                    // Set the source of the audio player to match the div ID
+                    const audioSource = document.createElement('source');
+                    audioSource.src = `/static/${div.id}.mp3`;  // Audio file name matches the div ID
+                    audioSource.type = 'audio/mpeg';
+
+                    audioPlayer.appendChild(audioSource);
+                    audioContainer.appendChild(audioPlayer);
+
+                    // Optional: Play the audio immediately
+                    audioPlayer.play();
+                });
+            });
+        });
+    </script> -->
+    <!-- <div class="playable">Click me to play audio!</div> -->
+    <!-- <audio id="audio-player" controls>
+        <source src="path_to_audio_file.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio> -->
+
+
+    <h1>Trending Songs</h1>
+    <button onclick="fetchTrendingSongs()">Fetch Trending Songs</button>
+    <ul id="songs-list"></ul>
+    <form method="post" action="{% url 'get_song' %}" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <label for="name">Enter Artist Name:</label>
+        <input type="text" name="name" id="name">
+        <br>
+        <input type="checkbox" name="filter" value="songs"><span>Song</span>
+        <input type="checkbox" name="filter" value="artists"><span>artists</span>
+        <input type="checkbox" name="filter" value="artists"><span>albums</span>
+        <br>
+        <button type="submit">Search</button>
+        <img src="" alt="">
+
+    </form>
+    <a href="/play">click</a>
+    <!-- <div class="form-group">
+        <form method="post" action="{% url 'get_song' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <label for="name">Enter Artist Name:</label>
+            <input type="text" name="name" id="name">
+            <label for="name">Search</label>
+            <input type="text" class="form-control" placeholder="Search" list="list" id="name">
+            <button type="submit">Search</button>
+            <datalist id="list">
+                <option></option>
+            </datalist>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', e => {
+            $('#input-datalist').autocomplete()
+        }, false);
+    </script> -->
+    <div class='playable'>click</div>
+    <p>{{ results }}</p>
+
+    <ul>
+        {% for result in results %}
+        {% if result.resultType == 'artist' %}
+        <div style="display: flex;">
+            <li style="margin:10px 0 ;">
+                <div style="display: flex;">
+                    {% if result.thumbnails %}
+                    <div class="player">
+                        <div class="trigger-div">
+                            <img src="{{ result.thumbnails.1.url }}" alt="{{ result.artists.0.name }}" height="120px"
+                                style="margin-right: 5px; border-radius: 4px;">
+                            <span
+                                style="display: flex; align-items: center; width: max-content; font-weight: 900; font-size: x-large; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                                {{ result.artists.0.name }}</span>
+
+                            {% if result.artists.0.id %}
+                            <a href="{% url 'clicked' result.artists.0.id %}">{{ result.artists.0.name }}</a>
+                            {% else %}
+                            <p>No name provided</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>No image available</p>
+                    {% endif %}
+                </div>
+                <a href="https://music.youtube.com/channel/{{ result.artists.0.id }}">{{ result.artists.0.name }}</a>
+                <p>{{result.thumbnails.1.url}}</p>
+            </li>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        {% for result in results %}
+
+        {% if result.category == 'Songs' %}
+
+        <div style="display: flex;">
+            <li style="margin:10px 0 ;">
+                <div style="display: flex;">
+                    {% if result.thumbnails %}
+                    <div class="player">
+                        <div class="trigger-div" id="{{ result.videoId }}">
+                            <img src="{{ result.thumbnails.1.url }}" alt="{{ result.title }}" height="100px"
+                                style="margin-right: 5px; border-radius: 4px;">
+                            <span
+                                style="display: flex; align-items: center; width: max-content; font-weight: 900; font-size: x-large; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                                {{ result.title }}</span>
+
+
+                        </div>
+
+                        <button class="playsong" id="{{ result.videoId }}">play</button>
+
+                    </div>
+                    {% else %}
+                    <p>No image available</p>
+                    {% endif %}
+                </div>
+            </li>
+        </div>
+        
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <div id="audio-container"></div>
+    <!-- <a href=""></a>
+    <audio controls>
+        <source src="{% static 'media/audio_file.mp3' %}" type="audio/mpeg">
+    </audio> -->
+
+</body>
+
+</html>
