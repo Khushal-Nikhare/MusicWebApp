@@ -45,7 +45,7 @@
                     $("#artist").empty();
 
                     var img = $("<img>").attr({
-                        "src": url0
+                        "src": videoDetail.thumbnails[1].url
                     });
 
                     // Create a new audio element
@@ -110,7 +110,7 @@
                         $("#artist").empty();
 
                         var img = $("<img>").attr({
-                            "src": url0
+                            "src": videoDetail.thumbnails[1].url
                         });
 
                         // Create a new audio element
@@ -273,18 +273,22 @@ or decrease the volume accordingly and can also pause it where you require.-->
                     <a class="card playsong" id="{{ quick_Pick.videoId }}">
                         <!-- <div class="card playsong" id="{{ quick_Pick.videoId }}"> -->
 
-                            <div>
-                                <img src="{{ quick_Pick.thumbnails.1.url }}">
+                        <div>
+                            {%if quick_Pick.thumbnails.1.url%}
+                            <img src="{{ quick_Pick.thumbnails.1.url }}">
+                            {%else%}
+                            <img src="{{ quick_Pick.thumbnails.0.url }}">
+                            {%endif%}
 
-                            </div>
-                            <div class="songs">
-                                <h3>
-                                    {{quick_Pick.title}}
-                                </h3>
-                                <p>
-                                    {{quick_Pick.artists.0.name}}
-                                </p>
-                            </div>
+                        </div>
+                        <div class="songs">
+                            <h3>
+                                {{quick_Pick.title}}
+                            </h3>
+                            <p>
+                                {{quick_Pick.artists.0.name}}
+                            </p>
+                        </div>
 
                         <!-- </div> -->
                     </a>
@@ -300,7 +304,12 @@ or decrease the volume accordingly and can also pause it where you require.-->
                     {% for trending_artist in trending_artists %}
                     <a href="{% url 'artist' trending_artist.browseId %}">
                         <div>
+                            {%if trending_artist.thumbnails.1.url%}
                             <img src="{{ trending_artist.thumbnails.1.url }}">
+
+                            {%else%}
+                            <img src="{{ trending_artist.thumbnails.0.url }}">
+                            {%endif%}
                             <div><i class="fas fa-play"></i></div>
                             <p>
                                 {{trending_artist.title}}
@@ -310,45 +319,6 @@ or decrease the volume accordingly and can also pause it where you require.-->
                     {% endfor %}
                 </div>
             </div>
-            <!-- music themes part --->
-            <!-- <div class="themes">
-                <div class="stations">
-                    <div id="purple1">
-                        <div id="purple2">
-                            <div id="purple3">
-                                <img src="{% static 'webCon/img/website_logo.png' %}">
-                                <p>Fusions</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tmain">
-                    {% for mood_categorie in mood_categories %}
-                    <div class="tcontent">
-                        <img src="{% static 'webCon/img/chill.jpeg' %}">
-                        <p>{{mood_categorie.title}}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div> -->
-            <!-- <div class="themes2">
-                <div class="outdiv">
-                    <div class="indiv">
-                        <span>party</span>
-                    </div>
-                </div>
-                <div class="outdiv">
-                    <div class="indiv">
-                        <span>Electronic</span>
-                    </div>
-                </div>
-                <div class="outdiv">
-                    <div class="indiv">
-                        <span>Travel</span>
-                    </div>
-                </div>
-            </div> -->
 
             <!-- latest section -->
             {% for sec in home %}
@@ -364,7 +334,11 @@ or decrease the volume accordingly and can also pause it where you require.-->
                         <a class="playsong" id="{{ song.videoId }}">
                             {%endif%}
                             <div>
+                                {%if song.thumbnails.1.url%}
                                 <img src="{{song.thumbnails.1.url}}">
+                                {%else%}
+                                <img src="{{song.thumbnails.0.url}}">
+                                {%endif%}
                                 <p>{{song.title}}</p>
                                 <p></p>
                             </div>
@@ -392,7 +366,12 @@ or decrease the volume accordingly and can also pause it where you require.-->
                             <div style="margin-right:4px;">
                             </div>
                             <div class="cover">
+
+                                {%if song.thumbnails.1.url%}
+                                <img src="{{song.thumbnails.1.url}}">
+                                {%else%}
                                 <img src="{{song.thumbnails.0.url}}">
+                                {%endif%}
                             </div>
                             <div id="info">
                                 <div>
