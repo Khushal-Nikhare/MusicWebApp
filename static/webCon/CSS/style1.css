@@ -51,7 +51,7 @@ body {
 
 .bg {
 	animation:movingdiv 2s ease-in-out infinite alternate;
-	background-image: linear-gradient(-60deg, #00FFFF 50%, #13acac 50%);
+	background-image: linear-gradient(-60deg, rgb(128, 54, 124) 50%, rgb(53, 25, 44) 50%);
 	bottom:0;
 	left:-50%;
 	opacity:.5;
