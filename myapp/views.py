@@ -5,14 +5,6 @@ from ytmusicapi import YTMusic
 
 ytmusic = YTMusic()
 
-# def fetch_trending_songs(request):
-#     if request.method == 'GET':
-#         ytmusic = YTMusic()
-#         trending_songs = ytmusic.get_charts(country='IN')['trending']['items']
-#         print(trending_songs)
-        
-#         return JsonResponse({'trending_songs': trending_songs})
-#     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 def index(request):
 
@@ -74,10 +66,11 @@ def get_song(request):
 def artist(request, artist):
     artists = ytmusic.get_artist(artist)
     # print(artists)
-    return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/Playlist.html', {'artist': artists })
+    return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/artist.html', {'artist': artists })
 
 def playlist(request, playlist):
+    print(playlist)
     playlists =  ytmusic.get_playlist(playlist)
+    trending_songs = ytmusic.get_charts(country='IN')['trending']['items']
     print(playlists)
-    return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/Playlist.html', {'playlist': playlists })
-
+    return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/Playlist.html', {'playlist': playlists ,'trending_songs':trending_songs})

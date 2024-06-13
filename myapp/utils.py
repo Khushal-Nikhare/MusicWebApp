@@ -8,7 +8,7 @@ import requests
 from ytmusicapi import YTMusic
 ytmusic = YTMusic() 
 
-media_path=r'myapp\static\\'
+media_path=r'static/'
 # media_path=static()
 
 def search(name):

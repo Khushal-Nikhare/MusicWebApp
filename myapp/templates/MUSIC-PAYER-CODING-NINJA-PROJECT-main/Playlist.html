@@ -48,7 +48,7 @@
                     $("#artist").empty();
 
                     var img = $("<img>").attr({
-                        "src": videoDetail.thumbnails[1].url
+                        "src": videoDetail.thumbnails[0].url
                     });
 
                     // Create a new audio element
@@ -113,7 +113,7 @@
                         $("#artist").empty();
 
                         var img = $("<img>").attr({
-                            "src": videoDetail.thumbnails[1].url
+                            "src": url0
                         });
 
                         // Create a new audio element
@@ -249,19 +249,19 @@
         <aside class="one first">
             <div class="ron">
                 <div class=ronimg>
-                    <img class="ronimgimg" src="{{artist.thumbnails.0.url}}" alt="{{artist.name}}">
+                    <img class="ronimgimg" src="{{playlist.thumbnails.3.url}}" alt="{{playlist.title}}">
                 </div>
                 <div class="ron-detail">
                     <div class="detail1" style="overflow: hidden;">
                         <div class="main-song">
-                            <h1> {{artist.name}}</h1>
+                            <h1> {{playlist.title}}</h1>
                         </div>
                         <div class="follow">
-                            {{artist.subscribers}} Subscribers
+                            {{playlist.year}}
                         </div>
                         <!-- <p class="auth">British Band</p> -->
                         <p class="des">
-                            {{artist.description}} </p>
+                            {{playlist.description}} </p>
                     </div>
                     &nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;
                     <div class="act">
@@ -270,28 +270,29 @@
                             <button>Follow</button> -->
                         </div>
                         <p>
-                            
+                            {{playlist.duration}}
                         </p>
                     </div>
                 </div>
             </div>
             <!-- playlist-->
-            <div class="pitems">
-                {% for artistRe in artist.songs.results %}
 
-                <div class="pitem playsong" id="{{artistRe.videoId}}">
+            <div class="pitems">
+                {% for playlistRe in playlist.tracks %}
+
+                <div class="pitem playsong" id="{{playlistRe.videoId}}">
                     <div class="side1">
                         <div>
                         </div>
                         <div>
-                            <img src="{{artistRe.thumbnails.0.url}}">
+                            <img src="{{playlistRe.thumbnails.0.url}}">
                             <div class="play-btn">
                                 <i class="fas fa-play"></i>
                             </div>
                         </div>
                         <div>
                             <h5>
-                                {{artistRe.title}}
+                                {{playlistRe.title}}
                             </h5>
                         </div>
                     </div>
@@ -303,6 +304,7 @@
                 {%endfor%}
 
             </div>
+
         </aside>
 
 
@@ -314,25 +316,26 @@
 
             <div class="mis">
                 <div class="sechead">
-                    <h1>Similar Artists</h1>
+                    <h1>Trending Songs</h1>
                     <div class="view-btn">
-                        View All
+                        
                     </div>
                 </div>
                 <div class="li">
-                    {% for artistRe in artist.related.results %}
-                    <a href="{% url 'artist' artistRe.browseId %}">
+                    {% for trending_song in trending_songs %}
+                    {% if trending_song.videoId != null %}
+                    <a class="playsong" id="trending_song.videoId">
                         <div class="litem">
                             <div>
 
-                                <img src="{{artistRe.thumbnails.1.url}}">
+                                <img src="{{trending_song.thumbnails.0.url}}">
                                 <div class="play-btn">
                                     <i class="fas fa-play"></i>
                                 </div>
                             </div>
                             <div style="position: absolute; left:120px;">
                                 <h5>
-                                    {{artistRe.title}}
+                                    {{trending_song.title}}
                                 </h5>
                             </div>
                             <div class="ex">
@@ -340,47 +343,14 @@
                                     <i class="fas fa-ellipsis-h"></i>
                                 </div>
                                 <p class="tm">
-                                    {{artistRe.subscribers}}
+                                    {{trending_song.artists.0.name}}
                                 </p>
                             </div>
                         </div>
                     </a>
+                    {% endif %}
                     {%endfor%}
                 </div>
-
-                <!-- <div class="mis">
-                    <div class="sechead">
-                        <h1>Recently Played</h1>
-                        <div class="viewbtn">
-                            View All
-                        </div>
-                    </div>
-                    <div class="li">
-                        <div class="pitem">
-                            <div class="side1">
-                                <div>
-                                    01
-                                </div>
-                                <div>
-                                    <img src="{% static 'webCon/img/PA4.jpg'%}">
-                                    <div class="play-btn">
-                                        <i class="fas fa-play"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h5>
-                                        GOLDEN
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="side3">
-                                <div>
-                                    <i class="far fa-heart"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </aside>
     </main>
@@ -400,16 +370,9 @@
 
                 </div>
             </div>
-            <!-- <div class="fticon">
-            <span>
-                <i class="far fa-heart"></i>
-            </span>
-            <span>
-                <i class="fas fa-ban"></i>
-            </span>
-        </div> -->
+
         </div>
-        <!-- <div id="audio-container"></div> -->
+
         <div class="player" id="audio-container">
 
         </div>

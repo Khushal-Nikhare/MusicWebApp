@@ -45,7 +45,7 @@
                     $("#artist").empty();
 
                     var img = $("<img>").attr({
-                        "src": videoDetail.thumbnails[1].url
+                        "src": url0
                     });
 
                     // Create a new audio element
@@ -110,7 +110,7 @@
                         $("#artist").empty();
 
                         var img = $("<img>").attr({
-                            "src": videoDetail.thumbnails[1].url
+                            "src": url0
                         });
 
                         // Create a new audio element
@@ -119,6 +119,7 @@
                             "controls": "controls",
                             "autoplay": "autoplay",
                             "src": "/static/" + songId + ".mp3"
+                            
                         });
 
                         // Append the audio player to the audio container
@@ -335,9 +336,9 @@ or decrease the volume accordingly and can also pause it where you require.-->
                             {%endif%}
                             <div>
                                 {%if song.thumbnails.1.url%}
-                                <img src="{{song.thumbnails.1.url}}">
+                                <img src="{{song.thumbnails.1.url}}">o
                                 {%else%}
-                                <img src="{{song.thumbnails.0.url}}">
+                                <img src="{{song.thumbnails.0.url}}">p
                                 {%endif%}
                                 <p>{{song.title}}</p>
                                 <p></p>
