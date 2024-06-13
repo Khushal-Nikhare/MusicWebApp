@@ -69,8 +69,8 @@ def artist(request, artist):
     return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/artist.html', {'artist': artists })
 
 def playlist(request, playlist):
-    print(playlist)
+    # print(playlist)
     playlists =  ytmusic.get_playlist(playlist)
     trending_songs = ytmusic.get_charts(country='IN')['trending']['items']
-    print(playlists)
+    # print(playlists)
     return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/Playlist.html', {'playlist': playlists ,'trending_songs':trending_songs})

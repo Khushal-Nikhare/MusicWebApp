@@ -38,9 +38,9 @@
                 success: function (response) {
                     $("#audio-container").empty();
 
-                    var url0 = response.url0; // The song URL returned from the backend
+                    // var url0 = response.url0; // The song URL returned from the backend
                     var videoDetail = response.videoDetail;
-
+                    // console.log(videoDetail)
 
                     // Remove any existing audio player
                     $("#sgimg").empty();
@@ -48,7 +48,7 @@
                     $("#artist").empty();
 
                     var img = $("<img>").attr({
-                        "src": videoDetail.thumbnails[0].url
+                        "src": videoDetail.thumbnail.thumbnails[0].url
                     });
 
                     // Create a new audio element
@@ -90,7 +90,7 @@
                 });
                 $("#audio-container").append(progress)
 
-                console.log("it is called");
+                // console.log("it is called");
 
                 // Send an AJAX request to the backend to get the song URL
                 $.ajax({
@@ -101,7 +101,7 @@
                     },
                     success: function (response) {
                         $("#audio-container").empty();
-                        console.log(response);
+                        // console.log(response);
 
                         var url0 = response.url0; // The song URL returned from the backend
                         var videoDetail = response.videoDetail;
@@ -163,43 +163,42 @@
             function displayResults(response) {
                 results = response.search_results
                 // url = response.url0
-                var resultsDiv = $('.plistcon');
+                var resultsDiv = $('.li');
                 resultsDiv.empty(); // Clear previous results
 
                 if (results.length > 0) {
                     results.forEach(function (result) {
+
                         var artists = result.artists;
 
                         var stydiv = $('<div></div>').attr({ "style": "margin-right:4px;" });
 
-                        var img = $('<img>').attr({ "src": result.thumbnails[0].url });
-                        var covdiv = $('<div></div>').attr({ "class": "cover" }).append(img);
+                        var img = $('<img>').attr({ "src": result.thumbnails[0].url });//~
+                        var faplay = $('<i></i>').attr({ "class": "fas fa-play" });
+                        var play_btn = $('<div></div>').attr({ "class": "play-btn" }).append(faplay);
+                        var div = $('<div></div>').append(img).append(play_btn);
 
                         var artistName
-                        var artistDiv = $('<div></div>');
+                        var artistDiv = $('<div></div>').attr({ "class": "ex" });
 
                         artists.forEach(function (artist) {
                             var p = artist.name;
 
-                            artistName = $('<p></p>').append(artist.name);
+                            artistName = $('<p></p>').attr({ "class": "tm" }).append(artist.name);
                             artistDiv.append(artistName);
-                            console.log(artist)
+                            // console.log(artist);
                         });
 
-                        var title = $('<div></div>').append(result.title);
+                        var titleh5 = $('<h5></h5>').append(result.title);
 
-                        var info = $('<div></div>').append(title, artistDiv);
+                        var title = $('<div></div>').attr({ "style": "position: absolute; left:120px;" }).append(titleh5);
 
-                        var icon = $('<div></div>').attr({ "class": "lcon" }).append(stydiv, covdiv, info);
+                        var litem = $('<div></div>').attr({ "class": "litem", "onClick": "demo('" + result.videoId + "')" }).append(div, title, artistDiv);
 
-                        // var playsong = $('<a></a>').attr({
-                        //     "class": "playsong",
-                        //     "id": result.videoId
-                        // });.append(playsong)
 
-                        var pitem = $('<div></div>').attr({ "class": "pitem playsong", "onClick": "demo('" + result.videoId + "')" }).append(icon);
+                        // var pitem = $('<div></div>').attr({ "class": "pitem playsong", "onClick": "demo('" + result.videoId + "')" }).append(icon);
 
-                        resultsDiv.append(pitem);
+                        resultsDiv.append(litem);
                     });
                 } else {
                     resultsDiv.text("No results found.");
@@ -318,16 +317,15 @@
                 <div class="sechead">
                     <h1>Trending Songs</h1>
                     <div class="view-btn">
-                        
+
                     </div>
                 </div>
                 <div class="li">
                     {% for trending_song in trending_songs %}
                     {% if trending_song.videoId != null %}
-                    <a class="playsong" id="trending_song.videoId">
+                    <a class="playsong" id="{{trending_song.videoId}}">
                         <div class="litem">
                             <div>
-
                                 <img src="{{trending_song.thumbnails.0.url}}">
                                 <div class="play-btn">
                                     <i class="fas fa-play"></i>
@@ -339,9 +337,6 @@
                                 </h5>
                             </div>
                             <div class="ex">
-                                <div>
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
                                 <p class="tm">
                                     {{trending_song.artists.0.name}}
                                 </p>

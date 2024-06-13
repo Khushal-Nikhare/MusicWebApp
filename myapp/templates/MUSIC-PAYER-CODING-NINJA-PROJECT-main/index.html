@@ -45,7 +45,7 @@
                     $("#artist").empty();
 
                     var img = $("<img>").attr({
-                        "src": url0
+                        "src": videoDetail.thumbnails[0].url
                     });
 
                     // Create a new audio element
@@ -87,7 +87,7 @@
                 });
                 $("#audio-container").append(progress)
 
-                console.log("it is called");
+                // console.log("it is called");
 
                 // Send an AJAX request to the backend to get the song URL
                 $.ajax({
@@ -98,7 +98,7 @@
                     },
                     success: function (response) {
                         $("#audio-container").empty();
-                        console.log(response);
+                        // console.log(response);
 
                         var url0 = response.url0; // The song URL returned from the backend
                         var videoDetail = response.videoDetail;
@@ -181,7 +181,7 @@
 
                             artistName = $('<p></p>').append(artist.name);
                             artistDiv.append(artistName);
-                            console.log(artist)
+                            // console.log(artist)
                         });
 
                         var title = $('<div></div>').append(result.title);
