@@ -347,7 +347,7 @@ img.ronimgimg {
 	flex-direction: row;
 	justify-content: flex-start;
 	align-items: center;
-	width: 30%;
+	width: max-content;
 	height: 100%;
 	padding: 0% 1%;
 }
@@ -372,7 +372,7 @@ img.ronimgimg {
 	height: 80%;
 	min-width: 50px;
 	max-width: 50px;
-	margin: 0px 12% 0px 12%;
+	margin: 0px 36px 0px 36px;
 	position: relative;
 }
 .side1 > div:nth-child(2) img {
