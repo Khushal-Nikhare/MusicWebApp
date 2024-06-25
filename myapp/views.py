@@ -11,10 +11,11 @@ def index(request):
     ytmusic = YTMusic()
 
     trending_songs = ytmusic.get_charts(country='IN')['trending']['items']
-    trending_artists = ytmusic.get_charts(country='IN')['artists']['items']
+    # trending_songs = ytmusic.get_charts(country='ZZ')['videos']['items']
+    trending_artists = ytmusic.get_charts(country='ZZ')['artists']['items']
     mood_categories = ytmusic.get_mood_categories()['Moods & moments']
     home = ytmusic.get_home(5)
-    # print(home)
+    # print(trending_songs)
     return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/index.html',{'trending_songs': trending_songs,'trending_artists':trending_artists,'mood_categories':mood_categories,'home':home})
 
 def get_song(request):
