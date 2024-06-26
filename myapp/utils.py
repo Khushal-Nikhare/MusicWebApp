@@ -33,8 +33,8 @@ def video_ID(search_results):
     return videoid
 
 def download(ids):
-    print(static(ids + '.mp3'))
-    print("call download ")
+    # print(static(ids + '.mp3'))
+    # print("call download ")
     paths = []
     songin=ytmusic.get_song(ids)
     result = search_file(media_path , ids +'.mp3')
@@ -49,12 +49,12 @@ def download(ids):
         os.rename(video, new_file)
         paths.append(new_file)
         
-    print(songin)
+    # print(songin)
     return songin
             
 
 def search_file(folder_path, file_name):
-    print("call search_file")
+    # print("call search_file")
     found_files = []
 
     for root, dirs, files in os.walk(folder_path):

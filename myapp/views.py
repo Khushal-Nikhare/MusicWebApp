@@ -37,33 +37,7 @@ def get_song(request):
             return JsonResponse({'search_results': search_results }, safe=False)
         else:    
              return JsonResponse([],safe=False)
-        #     ytmusic = YTMusic()
-        #     trending_songs = ytmusic.get_charts(country='IN')['trending']['items']
-            
-        #     clean_trending_songs = []
-        #     for song in trending_songs:
-                
-        #         thumbnail_url = song['thumbnails'][0]['url'] if song.get('thumbnails') else ''
-        #         clean_song = {
-        #             'title': song.get('title'),
-        #             'artists': [{'name': artist.get('name')} for artist in song.get('artists', [])],
-        #             'videoId': song.get('videoId'),
-        #             'thumbnail': thumbnail_url
-        #         }
-        #         clean_trending_songs.append(clean_song)
-        #     # print(test)
-        #     return JsonResponse({'trending_songs': clean_trending_songs})
-    
-    # if request.method == 'POST':
-    #     # selected_options = request.POST.getlist('filter')
-    #     name = request.POST.get('name')
-    #     search_results = search(name)
-    #     # vids = video_ID(search_results)
-    #     # print(selected_options)
-        # {% url 'playlist' trending_artist.artists.0.id %}
-    #     return render(request, 'MUSIC-PAYER-CODING-NINJA-PROJECT-main\\index.html',{'results' : search_results })
-    # return render(request, 'MUSIC-PAYER-CODING-NINJA-PROJECT-main\\index.html')
-
+         
 def artist(request, artist):
     artists = ytmusic.get_artist(artist)
     # print(artists)
