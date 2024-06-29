@@ -16,6 +16,7 @@ def index(request):
     mood_categories = ytmusic.get_mood_categories()['Moods & moments']
     home = ytmusic.get_home(5)
     # print(trending_songs)
+    video_ID(trending_songs)
     return render(request,'MUSIC-PAYER-CODING-NINJA-PROJECT-main/index.html',{'trending_songs': trending_songs,'trending_artists':trending_artists,'mood_categories':mood_categories,'home':home})
 
 def get_song(request):

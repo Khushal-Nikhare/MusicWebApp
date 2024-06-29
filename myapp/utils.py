@@ -21,13 +21,13 @@ def search(name):
 
 
 
-def video_ID(search_results):
-    print("call video_ID " + search_results[0]['category'])
+def video_ID(songs):
+    # print("call video_ID " + search_results[0]['category'])
     videoid=[]
-    for cate in search_results:
-        if cate['category'] == 'Songs':
+    for song in songs:
+        if song['videoId'] != 'Null':
             # print(cate)
-            videoid.append(cate['videoId'])
+            videoid.append(song['videoId'])
     
     print(videoid)
     return videoid
@@ -65,5 +65,4 @@ def search_file(folder_path, file_name):
         return found_files
 
 
-# import ytmusicapi
-# print(ytmusicapi.setup(filepath="browser.json", headers_raw="<headers copied above>"))
+
